@@ -3,68 +3,135 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dicicip.in — Knowledge Management System (KMS)</title>
-  <meta name="description" content="KMS prototype untuk Dicicip.in — repository artikel, SOP, FAQ, komentar, analytics, dan user roles." />
+  <title>Dicicip.in — KMS (Final)</title>
+  <meta name="description" content="Dicicip.in Knowledge Management System — Single-file final, tema senada, navbar gabungan, full features (localStorage)" />
   <style>
-    :root{--bg:#fafafa;--card:#ffffff;--muted:#666;--brand:#19547b;--accent:#ffd89b}
+    /* Palette */
+    :root{
+      --banana:#FFD54F;
+      --banana-2:#FFF8E1;
+      --brand:#19547B;
+      --brown:#5D4037;
+      --card:#FFFFFF;
+      --muted:#6b6b6b;
+      --border:#E0E0E0;
+      --glass: rgba(255,255,255,0.6);
+    }
     *{box-sizing:border-box}
-    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial; margin:0; background:var(--bg); color:#111;-webkit-font-smoothing:antialiased}
-    header{position:sticky;top:0;z-index:30;padding:14px 18px;background:linear-gradient(90deg,var(--accent),var(--brand));color:#fff;backdrop-filter:blur(6px)}
-    .container{max-width:1100px;margin:18px auto;padding:12px}
-    nav{display:flex;gap:12px;align-items:center}
-    nav a{color:rgba(255,255,255,0.95);text-decoration:none;font-weight:600}
-    .top-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .card{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 6px 18px rgba(10,10,10,0.04);border:1px solid #f3f3f3}
+    html,body{height:100%;margin:0;font-family:Inter,Ui-sans-serif,system-ui,Segoe UI,Roboto,"Poppins",Arial;color:var(--brown);background:var(--banana-2)}
+    a{color:inherit}
+    header{
+      position:sticky;top:0;z-index:50;
+      background: linear-gradient(90deg,var(--banana),var(--brand));
+      color:#fff;
+      padding:14px 20px;
+      backdrop-filter: blur(6px);
+      box-shadow:0 6px 18px rgba(0,0,0,0.08);
+    }
+    .container{max-width:1150px;margin:18px auto;padding:12px}
+    .nav-row{display:flex;align-items:center;gap:16px;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#fff6e0,#ffeaa3);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--brown);box-shadow:0 4px 10px rgba(0,0,0,0.07)
+    }
+    nav{display:flex;align-items:center;gap:12px}
+    nav a{color:rgba(255,255,255,0.95);text-decoration:none;padding:8px 10px;border-radius:8px;font-weight:600}
+    nav a:hover{background:rgba(255,255,255,0.08)}
+    .nav-right{display:flex;align-items:center;gap:8px}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.15);color:#fff;padding:8px 10px;border-radius:10px}
+    .badge{background:rgba(255,255,255,0.12);padding:6px 8px;border-radius:999px;font-size:12px;color:white}
+    main{padding:8px}
+    .card{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 8px 24px rgba(10,10,10,0.04);border:1px solid var(--border)}
     .controls{display:flex;gap:8px;align-items:center}
-    input[type="text"], input[type="search"], textarea, select{padding:8px;border-radius:10px;border:1px solid #e6e6e6;min-width:180px}
+    input[type="text"], input[type="search"], textarea, select{padding:10px;border-radius:10px;border:1px solid var(--border);min-width:180px}
     button{padding:8px 12px;border-radius:10px;border:0;background:var(--brand);color:#fff;cursor:pointer}
-    .btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.15)}
+    .btn-light{background:var(--banana);color:var(--brown);border:1px solid rgba(0,0,0,0.04)}
     .list{margin-top:14px;column-count:2;column-gap:16px}
-    @media(max-width:900px){.list{column-count:1}}
-    .article{display:inline-block;width:100%;margin:0 0 16px;padding:16px;border-radius:12px;background:var(--card);box-shadow:0 6px 18px rgba(10,10,10,0.04);border:1px solid #f2f2f2;transition:all .2s ease}
+    @media(max-width:980px){.list{column-count:1}}
+    .article{display:inline-block;width:100%;margin:0 0 16px;padding:16px;border-radius:12px;background:var(--card);box-shadow:0 6px 18px rgba(10,10,10,0.04);border:1px solid #f2f2f2;transition:all .22s ease}
     .article:hover{transform:translateY(-6px);box-shadow:0 12px 34px rgba(0,0,0,0.06)}
-    .tag{background:#f0f4f8;padding:6px 10px;border-radius:999px;font-size:12px;margin-right:6px}
-    .float-add{position:fixed;bottom:24px;right:24px;width:58px;height:58px;display:flex;align-items:center;justify-content:center;background:var(--brand);color:#fff;border-radius:50%;font-size:28px;font-weight:600;box-shadow:0 8px 22px rgba(0,0,0,0.25);cursor:pointer;z-index:999;transition:all .25s ease}
-    .float-add:hover{transform:scale(1.12) rotate(8deg);box-shadow:0 12px 28px rgba(0,0,0,0.32)}
+    .tag{background:#FFF3D6;padding:6px 10px;border-radius:999px;font-size:12px;margin-right:6px;color:var(--brown)}
+    .float-add{position:fixed;bottom:24px;right:24px;width:62px;height:62px;display:flex;align-items:center;justify-content:center;background:var(--banana);color:var(--brown);border-radius:50%;font-size:34px;font-weight:700;box-shadow:0 12px 34px rgba(0,0,0,0.18);cursor:pointer;z-index:999;transition:all .25s ease}
+    .float-add:hover{transform:scale(1.08) rotate(6deg)}
     .hidden{display:none}
     .meta{font-size:12px;color:var(--muted)}
-    .editor{display:grid;gap:8px}
-    .badge{background:#eef2ff;padding:6px 8px;border-radius:8px;font-size:12px}
     .small{font-size:13px;color:var(--muted)}
     footer{margin:40px 0;text-align:center;color:var(--muted)}
 
-    /* Dark mode auto */
-    @media (prefers-color-scheme: dark){
-      :root{--bg:#0f0f12;--card:#131417;--muted:#9aa0a6}
-      body{background:var(--bg);color:#eaeaea}
-      .card,.article{background:var(--card);border-color:#232427}
+    /* responsive mobile menu */
+    .burger{display:none;background:transparent;border:0;color:#fff;font-size:22px}
+    @media(max-width:760px){
+      nav{display:none}
+      .burger{display:block}
     }
 
-    /* animations */
-    .article{opacity:0;animation:fadeIn .45s ease forwards}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes fadeSlide{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+    /* viewer */
+    .viewer-content{white-space:pre-wrap;line-height:1.6}
+    .comment{border-left:3px solid #f0f0f0;padding-left:10px;margin-bottom:8px}
+    .reply{margin-left:12px;border-left:2px dashed #eee;padding-left:8px}
 
-    /* analytics */
+    /* dashboard grid */
     .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    @media(max-width:900px){.grid-3{grid-template-columns:1fr}}
+    @media(max-width:980px){.grid-3{grid-template-columns:1fr}}
+
+    /* animations */
+    .fade-in{animation:fadeIn .45s ease forwards}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+    /* dark mode */
+    @media (prefers-color-scheme: dark){
+      :root{--card:#121216;--banana-2:#0f0f12;--muted:#9aa0a6}
+      body{background:var(--banana-2);color:#eaeaea}
+      header{background:linear-gradient(90deg,#3b6b7f,#112d3a)}
+    }
+
+    /* small helpers */
+    .flex{display:flex;gap:8px;align-items:center}
+    .grow{flex:1}
+    .center{text-align:center}
+    .pill{padding:6px 10px;border-radius:999px;background:#fff8e6;border:1px solid var(--border);font-weight:600}
   </style>
 </head>
 <body>
   <header>
-    <div class="container top-row">
-      <div>
-        <h1 style="margin:0;font-size:18px">Dicicip.in — Knowledge Management System</h1>
-        <div style="font-size:13px;opacity:0.95">Simpan SOP, resep, FAQ, dan pengetahuan tim.</div>
+    <div class="container nav-row">
+      <div class="brand">
+        <div class="logo">DB</div>
+        <div style="line-height:1">
+          <div style="font-weight:800">Dicicip.in</div>
+          <div style="font-size:12px;opacity:0.95">Banana & Crispy</div>
+        </div>
       </div>
+
       <nav>
         <a href="#home" onclick="showPage('home')">Home</a>
+        <a href="#menu" onclick="showPage('menu')">Menu</a>
+        <a href="#artikel" onclick="showPage('artikel')">Artikel</a>
+        <a href="#kategori" onclick="showPage('kategori')">Kategori</a>
+        <a href="#bookmark" onclick="showPage('bookmark')">Bookmark</a>
         <a href="#dashboard" onclick="showPage('dashboard')">Dashboard</a>
         <a href="#about" onclick="showPage('about')">About</a>
-        <div style="width:12px"></div>
-        <span id="userDisplay" class="badge small">Guest</span>
-        <button id="btnLogin" class="btn-ghost" onclick="openLogin()">Login</button>
-        <button id="darkToggle" style="margin-left:8px" class="btn-ghost" onclick="toggleDark()">🌓</button>
+        <a href="#contact" onclick="showPage('contact')">Contact</a>
+      </nav>
+
+      <div class="nav-right">
+        <button class="btn-ghost" onclick="openLogin()" id="btnLogin">Login</button>
+        <div id="userDisplay" class="badge">Guest</div>
+        <button class="btn-ghost" onclick="toggleDark()">🌓</button>
+        <button class="burger" onclick="toggleMobileMenu()">☰</button>
+      </div>
+    </div>
+    <!-- mobile menu drawer -->
+    <div id="mobileMenu" class="hidden" style="padding:8px 20px;background:linear-gradient(90deg,var(--banana),var(--brand));">
+      <nav style="display:flex;flex-direction:column;gap:8px">
+        <a href="#home" onclick="showPage('home');toggleMobileMenu()">Home</a>
+        <a href="#menu" onclick="showPage('menu');toggleMobileMenu()">Menu</a>
+        <a href="#artikel" onclick="showPage('artikel');toggleMobileMenu()">Artikel</a>
+        <a href="#kategori" onclick="showPage('kategori');toggleMobileMenu()">Kategori</a>
+        <a href="#bookmark" onclick="showPage('bookmark');toggleMobileMenu()">Bookmark</a>
+        <a href="#dashboard" onclick="showPage('dashboard');toggleMobileMenu()">Dashboard</a>
+        <a href="#about" onclick="showPage('about');toggleMobileMenu()">About</a>
+        <a href="#contact" onclick="showPage('contact');toggleMobileMenu()">Contact</a>
       </nav>
     </div>
   </header>
@@ -73,49 +140,64 @@
     <!-- HOME -->
     <section id="page-home">
       <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
           <div style="flex:1">
-            <input id="search" type="search" placeholder="Cari artikel, SOP, tag..." style="width:100%" oninput="renderList()" />
+            <input id="search" type="search" placeholder="Cari artikel, tag, atau SOP..." style="width:100%" oninput="renderList()" />
           </div>
           <div class="controls">
             <select id="filterCategory" onchange="renderList()">
               <option value="">Semua Kategori</option>
             </select>
+            <select id="sortBy" onchange="renderList()">
+              <option value="date">Terbaru</option>
+              <option value="popular">Popular</option>
+              <option value="rating">Rating</option>
+            </select>
             <button onclick="openEditor()">+ Buat</button>
-            <button onclick="exportJSON()" class="btn-ghost">Ekspor</button>
-            <button onclick="importJSON()" class="btn-ghost">Impor</button>
+            <button class="btn-light" onclick="exportJSON()">Ekspor</button>
+            <button class="btn-light" onclick="importJSON()">Impor</button>
           </div>
         </div>
       </div>
 
       <div id="emptyState" style="margin-top:12px;color:var(--muted)">Tambah dokumentasi penting timmu — resep, SOP, panduan, dan catatan.</div>
-
-      <div id="list" class="list"></div>
+      <div id="list" class="list fade-in"></div>
     </section>
 
-    <!-- EDITOR -->
-    <section id="page-editor" class="hidden">
+    <!-- MENU (restoran style, mirrored from site) -->
+    <section id="page-menu" class="hidden">
       <div class="card">
-        <h3 id="editorTitle">Buat Artikel</h3>
-        <div class="editor">
-          <input id="title" type="text" placeholder="Judul (wajib)" />
-          <input id="category" type="text" placeholder="Kategori (Resep / SOP / FAQ / Lainnya)" />
-          <input id="tagsInput" type="text" placeholder="Tags, pisahkan koma" />
-          <textarea id="content" rows="10" placeholder="Isi artikel — langkah, catatan, bahan..." ></textarea>
-          <div style="display:flex;gap:8px;align-items:center">
-            <button id="saveArticle">Simpan</button>
-            <button onclick="cancelEditor()" class="btn-ghost">Batal</button>
-            <button id="deleteArticle" class="btn-ghost hidden" onclick="deleteArticleConfirm()">Hapus</button>
-            <div style="flex:1"></div>
-            <div class="small">Versi: <span id="verLabel">1</span></div>
-          </div>
+        <h3>Menu — Special Banana</h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <div class="card"><h4>Pisang Krispi</h4><div class="small">Rp 18.000</div></div>
+          <div class="card"><h4>Pisang Coklat</h4><div class="small">Rp 20.000</div></div>
+          <div class="card"><h4>Pisang Keju</h4><div class="small">Rp 22.000</div></div>
         </div>
       </div>
     </section>
 
-    <!-- VIEWER -->
-    <section id="page-viewer" class="hidden">
-      <div id="viewer" class="card"></div>
+    <!-- ARTIKEL (KMS main list) -->
+    <section id="page-artikel" class="hidden">
+      <div class="card">
+        <h3>Semua Artikel</h3>
+        <div id="artikelList" class="list"></div>
+      </div>
+    </section>
+
+    <!-- KATEGORI -->
+    <section id="page-kategori" class="hidden">
+      <div class="card">
+        <h3>Kategori</h3>
+        <div id="categories" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      </div>
+    </section>
+
+    <!-- BOOKMARK -->
+    <section id="page-bookmark" class="hidden">
+      <div class="card">
+        <h3>Bookmark</h3>
+        <div id="bookmarkList"></div>
+      </div>
     </section>
 
     <!-- DASHBOARD -->
@@ -128,35 +210,68 @@
       <div class="card">
         <h4>Admin Tools</h4>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button onclick="clearAll()" class="btn-ghost">Hapus Semua (dev)</button>
-          <button onclick="downloadBackup()" class="btn-ghost">Download Backup</button>
+          <button onclick="downloadBackup()" class="btn-light">Download Backup</button>
+          <button onclick="clearAll()" class="btn-ghost">Hapus Semua (DEV)</button>
         </div>
       </div>
     </section>
 
+    <!-- ABOUT -->
     <section id="page-about" class="hidden">
       <div class="card">
-        <h3>Tentang KMS Dicicip.in</h3>
-        <p>Prototype KMS berbasis localStorage. Siap diupgrade ke backend & DB bila diperlukan.</p>
+        <h3>Tentang Dicicip.in KMS</h3>
+        <p>Prototype KMS untuk Dicicip.in, menggabungkan tampilan website restoran dengan fitur manajemen pengetahuan tim.</p>
       </div>
     </section>
 
+    <!-- CONTACT -->
+    <section id="page-contact" class="hidden">
+      <div class="card">
+        <h3>Contact</h3>
+        <p>Hubungi: admin@dicicipin.example</p>
+      </div>
+    </section>
+
+    <!-- EDITOR / MODAL STYLE -->
+    <section id="page-editor" class="hidden">
+      <div class="card" style="max-width:880px;margin:auto">
+        <h3 id="editorTitle">Buat Artikel</h3>
+        <div style="display:grid;gap:10px">
+          <input id="title" type="text" placeholder="Judul (wajib)" />
+          <input id="category" type="text" placeholder="Kategori (Resep / SOP / FAQ / Lainnya)" />
+          <input id="tagsInput" type="text" placeholder="Tags, pisahkan koma" />
+          <textarea id="content" rows="12" placeholder="Isi artikel — langkah, catatan, bahan..." ></textarea>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="saveArticle">Simpan</button>
+            <button class="btn-ghost" onclick="cancelEditor()">Batal</button>
+            <button id="deleteArticle" class="btn-ghost hidden" onclick="deleteArticleConfirm()">Hapus</button>
+            <div style="flex:1"></div>
+            <div class="small">Versi: <span id="verLabel">1</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEWER -->
+    <section id="page-viewer" class="hidden">
+      <div id="viewer" class="card" style="max-width:880px;margin:auto"></div>
+    </section>
+
+    <!-- LOGIN -->
     <section id="page-login" class="hidden">
-      <div class="card" style="max-width:480px;margin:auto">
-        <h3>Login / Pilih User</h3>
+      <div class="card" style="max-width:440px;margin:auto">
+        <h3>Login Demo</h3>
         <select id="userSelect"></select>
         <div style="display:flex;gap:8px;margin-top:12px">
           <button onclick="doLogin()">Login</button>
-          <button onclick="closeLogin()" class="btn-ghost">Batal</button>
+          <button class="btn-ghost" onclick="closeLogin()">Batal</button>
         </div>
         <div style="margin-top:12px" class="small">(Demo users: admin/editor/viewer)</div>
       </div>
     </section>
 
-    <section id="analytics" class="card" style="margin-top:20px"></section>
-
-    <footer>
-      <div class="small">Dicicip.in KMS — prototype • localStorage • built for demo</div>
+    <footer class="small center">
+      Dicicip.in KMS — prototype • localStorage • built for demo
     </footer>
   </main>
 
@@ -164,216 +279,275 @@
   <input id="fileInput" type="file" accept="application/json" class="hidden" />
 
   <script>
-    // --- Data & utils ---
-    const LS_KEY = 'dicicip_kms_v2'
-    const USERS_KEY = 'dicicip_kms_users'
-    let articles = JSON.parse(localStorage.getItem(LS_KEY) || '[]')
-    let users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]')
-    let currentUser = null
-    let editingId = null
+    // Data keys
+    const LS_KEY = 'dicicip_kms_vfinal';
+    const USERS_KEY = 'dicicip_kms_users_vfinal';
+    let articles = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+    let users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+    let currentUser = null;
+    let editingId = null;
 
-    // Seed default users & sample articles
+    // Seed demo users and sample articles
     if(!users.length){
       users = [
         {id:'u_admin', name:'Admin', role:'admin'},
         {id:'u_editor', name:'Editor', role:'editor'},
         {id:'u_viewer', name:'Viewer', role:'viewer'}
-      ]
-      localStorage.setItem(USERS_KEY, JSON.stringify(users))
+      ];
+      localStorage.setItem(USERS_KEY, JSON.stringify(users));
     }
     if(!articles.length){
       articles = [
-        {id:uid(), title:'Resep Banana Crispy', category:'Resep', tags:['pisang','goreng'], content:'Langkah 1: Siapkan pisang...\nLangkah 2: Goreng', author:'u_admin', date:new Date().toISOString(), versions:[], comments:[], rating:{up:3,down:0}, bookmarks:[]},
-        {id:uid(), title:'Prosedur Kebersihan Dapur', category:'SOP', tags:['kebersihan','sop'], content:'Cuci tangan, sanitasi alat...', author:'u_editor', date:new Date().toISOString(), versions:[], comments:[], rating:{up:5,down:1}, bookmarks:[]}
-      ]
-      saveAll()
+        {id:uid(), title:'Resep Banana Crispy', category:'Resep', tags:['pisang','goreng'], content:'Langkah 1: Siapkan pisang...\nLangkah 2: Goreng hingga krispi', author:'u_admin', date:new Date().toISOString(), versions:[], comments:[], rating:{up:4,down:0}, bookmarks:[]},
+        {id:uid(), title:'SOP Kebersihan Dapur', category:'SOP', tags:['kebersihan','sop'], content:'1. Cuci tangan\n2. Sanitasi alat\n3. Simpan bahan', author:'u_editor', date:new Date().toISOString(), versions:[], comments:[], rating:{up:6,down:1}, bookmarks:[]}
+      ];
+      saveAll();
     }
 
-    function uid(){return Math.random().toString(36).slice(2,9)}
+    function uid(){ return Math.random().toString(36).slice(2,9); }
     function saveAll(){ localStorage.setItem(LS_KEY, JSON.stringify(articles)); }
 
-    // --- Routing ---
+    // Routing and pages
     function showPage(p){
-      document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'))
-      document.getElementById('page-'+p)?.classList.remove('hidden')
-      if(p==='home') renderList()
-      if(p==='dashboard') renderDashboard()
+      document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+      const el = document.getElementById('page-'+p);
+      if(el) el.classList.remove('hidden');
+      // update active render
+      if(p==='home') { renderList(); }
+      if(p==='artikel') { renderArtikel(); }
+      if(p==='kategori') { renderCategories(); }
+      if(p==='bookmark') { renderBookmarks(); }
+      if(p==='dashboard') { renderDashboard(); }
+      if(p==='menu') { /* menu static */ }
+      window.scrollTo({top:0,behavior:'smooth'});
     }
-    showPage('home')
+    showPage('home');
 
-    // --- Login / Users ---
+    // Mobile menu toggle
+    function toggleMobileMenu(){
+      const m = document.getElementById('mobileMenu');
+      if(m.classList.contains('hidden')) m.classList.remove('hidden'); else m.classList.add('hidden');
+    }
+
+    // Login
     function openLogin(){
-      document.getElementById('page-login').classList.remove('hidden')
-      const sel = document.getElementById('userSelect'); sel.innerHTML = users.map(u=>`<option value="${u.id}">${u.name} (${u.role})</option>`).join('')
+      showPage('login');
+      const sel = document.getElementById('userSelect');
+      sel.innerHTML = users.map(u=>`<option value="${u.id}">${u.name} (${u.role})</option>`).join('');
     }
-    function closeLogin(){ document.getElementById('page-login').classList.add('hidden') }
-    function doLogin(){ const id = document.getElementById('userSelect').value; currentUser = users.find(u=>u.id===id); document.getElementById('userDisplay').innerText = currentUser.name; document.getElementById('btnLogin').innerText='Logout'; document.getElementById('page-login').classList.add('hidden') }
+    function closeLogin(){ showPage('home'); }
+    function doLogin(){
+      const id = document.getElementById('userSelect').value;
+      currentUser = users.find(u=>u.id===id);
+      document.getElementById('userDisplay').innerText = currentUser.name;
+      document.getElementById('btnLogin').innerText = 'Logout';
+      showPage('home');
+    }
     document.getElementById('btnLogin').addEventListener('click', ()=>{
-      if(currentUser) { currentUser=null; document.getElementById('userDisplay').innerText='Guest'; document.getElementById('btnLogin').innerText='Login' } else openLogin()
-    })
+      if(currentUser){ currentUser = null; document.getElementById('userDisplay').innerText='Guest'; document.getElementById('btnLogin').innerText='Login'; showPage('home'); } else openLogin();
+    });
 
-    // --- Render list ---
+    // Populate categories
     function populateCategories(){
-      const cats = [''].concat([...new Set(articles.map(a=>a.category).filter(Boolean))])
-      document.getElementById('filterCategory').innerHTML = cats.map(c=>`<option value="${c}">${c||'Semua Kategori'}</option>`).join('')
+      const cats = [''].concat([...new Set(articles.map(a=>a.category).filter(Boolean))]);
+      document.getElementById('filterCategory').innerHTML = cats.map(c=>`<option value="${c}">${c||'Semua Kategori'}</option>`).join('');
     }
 
+    // Render list on home
     function renderList(){
-      const q = document.getElementById('search').value.trim().toLowerCase()
-      const cat = document.getElementById('filterCategory').value
-      populateCategories()
-      const filtered = articles.filter(a=>{
-        if(cat && a.category !== cat) return false
-        if(!q) return true
-        return (a.title+' '+a.content+' '+(a.tags||[]).join(' ')).toLowerCase().includes(q)
-      })
-      const listEl = document.getElementById('list'); listEl.innerHTML = ''
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      const cat = document.getElementById('filterCategory').value;
+      const sort = document.getElementById('sortBy').value;
+      populateCategories();
+      let filtered = articles.filter(a=>{
+        if(cat && a.category !== cat) return false;
+        if(!q) return true;
+        return (a.title+' '+a.content+' '+(a.tags||[]).join(' ')).toLowerCase().includes(q);
+      });
+      if(sort==='popular') filtered.sort((a,b)=>((b.rating?.up||0)-(a.rating?.up||0)));
+      if(sort==='rating') filtered.sort((a,b)=>((b.rating?.up - b.rating?.down) - (a.rating?.up - a.rating?.down)));
+      if(sort==='date') filtered.sort((a,b)=> new Date(b.date) - new Date(a.date));
+      const listEl = document.getElementById('list'); listEl.innerHTML = '';
       if(!filtered.length){ document.getElementById('emptyState').style.display='block' } else { document.getElementById('emptyState').style.display='none' }
       filtered.forEach(a=>{
-        const el = document.createElement('div'); el.className='article'
+        const el = document.createElement('div'); el.className='article';
         el.innerHTML = `
-          <div class="meta">${a.category} • ${new Date(a.date).toLocaleDateString()}</div>
+          <div class="meta">${escapeHtml(a.category) || 'Tanpa Kategori'} • ${new Date(a.date).toLocaleDateString()}</div>
           <h4 style="margin:6px 0">${escapeHtml(a.title)}</h4>
           <div style="font-size:14px;line-height:1.4;color:#333">${escapeHtml(a.content).slice(0,180)}${a.content.length>180?'...':''}</div>
-          <div style="margin-top:12px" class="tags">${(a.tags||[]).map(t=>`<span class=\"tag\">${escapeHtml(t)}</span>`).join('')}</div>
+          <div style="margin-top:12px" class="tags">${(a.tags||[]).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
           <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
             <button onclick="openView('${a.id}')">Lihat</button>
-            <button class='btn-ghost' onclick="openEditor('${a.id}')">Edit</button>
-            <div style='flex:1;text-align:right;'>
-              <span class='small'>👍${a.rating?.up||0} 👎${a.rating?.down||0}</span>
-            </div>
-          </div>`
-        listEl.appendChild(el)
-      })
+            <button class="btn-ghost" onclick="openEditor('${a.id}')">Edit</button>
+            <div style="flex:1;text-align:right"><span class="small">👍${a.rating?.up||0} 👎${a.rating?.down||0}</span></div>
+          </div>`;
+        listEl.appendChild(el);
+      });
     }
 
-    function escapeHtml(s){ return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])) }
+    // Render artikel page listing
+    function renderArtikel(){
+      const el = document.getElementById('artikelList'); el.innerHTML='';
+      articles.forEach(a=>{
+        const card = document.createElement('div'); card.className='article';
+        card.innerHTML = `<div class="meta">${a.category} • ${new Date(a.date).toLocaleDateString()}</div><h4>${escapeHtml(a.title)}</h4><div class="small">${(a.tags||[]).join(', ')}</div><div style="margin-top:8px">${escapeHtml(a.content).slice(0,200)}...</div><div style="margin-top:10px"><button onclick="openView('${a.id}')">Buka</button></div>`;
+        el.appendChild(card);
+      });
+    }
 
-    // --- Editor / Create / Update ---
-    const editorPanel = document.getElementById('page-editor')
+    function escapeHtml(s){ return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+    // Editor
     function openEditor(id){
-      showPage('editor')
-      editingId = id || null
-      document.getElementById('editorTitle').innerText = id? 'Edit Artikel' : 'Buat Artikel Baru'
-      const item = articles.find(a=>a.id===id)
-      document.getElementById('title').value = item? item.title : ''
-      document.getElementById('category').value = item? item.category : ''
-      document.getElementById('tagsInput').value = item? (item.tags||[]).join(', ') : ''
-      document.getElementById('content').value = item? item.content : ''
-      document.getElementById('deleteArticle').classList.toggle('hidden', !id)
-      document.getElementById('verLabel').innerText = item? (item.versions?.length+1) : '1'
-      editorPanel.classList.remove('hidden')
-      editorPanel.style.animation='fadeSlide .35s ease'
+      showPage('editor');
+      editingId = id || null;
+      document.getElementById('editorTitle').innerText = id? 'Edit Artikel' : 'Buat Artikel Baru';
+      const item = articles.find(a=>a.id===id);
+      document.getElementById('title').value = item? item.title : '';
+      document.getElementById('category').value = item? item.category : '';
+      document.getElementById('tagsInput').value = item? (item.tags||[]).join(', ') : '';
+      document.getElementById('content').value = item? item.content : '';
+      document.getElementById('deleteArticle').classList.toggle('hidden', !id);
+      document.getElementById('verLabel').innerText = item? (item.versions?.length+1) : '1';
     }
-    function cancelEditor(){ showPage('home'); editingId=null }
+    function cancelEditor(){ showPage('home'); editingId=null; }
 
     document.getElementById('saveArticle').addEventListener('click', ()=>{
       const title = document.getElementById('title').value.trim(); if(!title){alert('Judul wajib diisi'); return}
-      const category = document.getElementById('category').value.trim()
-      const tags = document.getElementById('tagsInput').value.split(',').map(s=>s.trim()).filter(Boolean)
-      const content = document.getElementById('content').value.trim()
-      const now = new Date().toISOString()
+      const category = document.getElementById('category').value.trim();
+      let tags = document.getElementById('tagsInput').value.split(',').map(s=>s.trim()).filter(Boolean);
+      const content = document.getElementById('content').value.trim();
+      const now = new Date().toISOString();
       if(editingId){
         articles = articles.map(a=>{
-          if(a.id!==editingId) return a
-          // push current state into versions
-          const vers = a.versions || []
-          vers.push({title:a.title,category:a.category,tags:a.tags,content:a.content,date:a.date,editor:currentUser?currentUser.id:'guest'})
-          return {...a, title, category, tags, content, date:now, versions:vers}
-        })
+          if(a.id!==editingId) return a;
+          const vers = a.versions || [];
+          vers.push({title:a.title,category:a.category,tags:a.tags,content:a.content,date:a.date,editor:currentUser?currentUser.id:'guest'});
+          return {...a, title, category, tags, content, date:now, versions:vers};
+        });
       } else {
-        const art = {id:uid(), title, category, tags, content, author: currentUser?currentUser.id:'guest', date:now, versions:[], comments:[], rating:{up:0,down:0}, bookmarks:[]}
-        articles.unshift(art)
+        if(!tags.length) tags = autotag(title+' '+content);
+        const art = {id:uid(), title, category, tags, content, author: currentUser?currentUser.id:'guest', date:now, versions:[], comments:[], rating:{up:0,down:0}, bookmarks:[]};
+        articles.unshift(art);
       }
-      saveAll(); renderList(); showPage('home')
-    })
+      saveAll(); renderList(); showPage('home');
+    });
 
-    function deleteArticleConfirm(){ if(!editingId) return; if(!confirm('Hapus artikel ini?')) return; articles = articles.filter(a=>a.id!==editingId); saveAll(); renderList(); showPage('home') }
+    function deleteArticleConfirm(){ if(!editingId) return; if(!confirm('Hapus artikel ini?')) return; articles = articles.filter(a=>a.id!==editingId); saveAll(); renderList(); showPage('home'); }
 
-    // --- Viewer ---
+    // Viewer
     function openView(id){
-      const item = articles.find(a=>a.id===id); if(!item) return
-      showPage('viewer'); const v = document.getElementById('viewer')
-      v.innerHTML = `<div class=\"meta\">${item.category} • ${new Date(item.date).toLocaleString()}</div>
+      const item = articles.find(a=>a.id===id); if(!item) return;
+      showPage('viewer'); const v = document.getElementById('viewer');
+      v.innerHTML = `<div class="meta">${escapeHtml(item.category)} • ${new Date(item.date).toLocaleString()}</div>
         <h2>${escapeHtml(item.title)}</h2>
-        <div class=\"tags\">${(item.tags||[]).map(t=>`<span class=\"tag\">${escapeHtml(t)}</span>`).join('')}</div>
-        <div style=\"white-space:pre-wrap;margin-top:12px\">${escapeHtml(item.content)}</div>
-        <div style=\"margin-top:12px;display:flex;gap:8px;align-items:center\">
-          <button onclick=\"openEditor('${item.id}')\">Edit</button>
-          <button class=\"btn-ghost\" onclick=\"toggleBookmark('${item.id}')\">Bookmark</button>
-          <div style=\"flex:1;text-align:right\">
-            <button onclick=\"vote('${item.id}', 'up')\">👍</button>
-            <button onclick=\"vote('${item.id}', 'down')\">👎</button>
+        <div class="tags">${(item.tags||[]).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
+        <div class="viewer-content" style="margin-top:12px">${escapeHtml(item.content)}</div>
+        <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+          <button onclick="openEditor('${item.id}')">Edit</button>
+          <button class="btn-ghost" onclick="toggleBookmark('${item.id}')">Bookmark</button>
+          <div style="flex:1;text-align:right">
+            <button onclick="vote('${item.id}','up')">👍</button>
+            <button onclick="vote('${item.id}','down')">👎</button>
           </div>
         </div>
-        <div style=\"margin-top:14px\"><h4>Komentar</h4><div id=\"commentsList\"></div>
-        <textarea id=\"commentInput\" rows=\"3\" placeholder=\"Tulis komentar...\"></textarea>
-        <div style=\"margin-top:8px;display:flex;gap:8px\"><button onclick=\"postComment('${item.id}')\">Kirim</button><button class=\"btn-ghost\" onclick=\"renderComments('${item.id}')\">Refresh</button></div></div>
-        <div style=\"margin-top:12px\"><h4>Versi</h4><div id=\"versionsList\"></div></div>`
-      v.style.animation='fadeSlide .35s ease'
-      renderComments(item.id); renderVersions(item.id)
+        <div style="margin-top:14px"><h4>Komentar</h4><div id="commentsList"></div>
+        <textarea id="commentInput" rows="3" placeholder="Tulis komentar..."></textarea>
+        <div style="margin-top:8px;display:flex;gap:8px"><button onclick="postComment('${item.id}')">Kirim</button><button class="btn-ghost" onclick="renderComments('${item.id}')">Refresh</button></div></div>
+        <div style="margin-top:12px"><h4>Versi</h4><div id="versionsList"></div></div>`;
+      renderComments(item.id); renderVersions(item.id);
     }
 
-    // --- Comments ---
-    function renderComments(id){ const item = articles.find(a=>a.id===id); const list = document.getElementById('commentsList'); if(!item) return; list.innerHTML = (item.comments||[]).map(c=>`<div style=\"margin-bottom:8px\"><div class=\"small\"><b>${c.userName||'Guest'}</b> • ${new Date(c.date).toLocaleString()}</div><div style=\"white-space:pre-wrap\">${escapeHtml(c.text)}</div></div>`).join('') }
-    function postComment(id){ const txt = document.getElementById('commentInput').value.trim(); if(!txt) return alert('Komentar kosong'); const item = articles.find(a=>a.id===id); const meta = {userId: currentUser?currentUser.id:'guest', userName: currentUser?currentUser.name:'Guest', date:new Date().toISOString(), text:txt}; item.comments = item.comments||[]; item.comments.unshift(meta); saveAll(); renderComments(id); document.getElementById('commentInput').value='' }
+    // Comments (threaded simple)
+    function renderComments(id){
+      const item = articles.find(a=>a.id===id); const list = document.getElementById('commentsList'); if(!item) return;
+      const tree = item.comments || [];
+      list.innerHTML = tree.map(c => renderCommentHtml(c)).join('');
+    }
+    function renderCommentHtml(c){
+      const replies = (c.replies||[]).map(r=>`<div class="reply"><div class="small"><b>${escapeHtml(r.userName||'Guest')}</b> • ${new Date(r.date).toLocaleString()}</div><div style="white-space:pre-wrap">${escapeHtml(r.text)}</div></div>`).join('');
+      return `<div class="comment"><div class="small"><b>${escapeHtml(c.userName||'Guest')}</b> • ${new Date(c.date).toLocaleString()}</div><div style="white-space:pre-wrap">${escapeHtml(c.text)}</div>${replies}<div style="margin-top:6px"><button class="btn-ghost" onclick="replyPrompt('${c.id}','${c.parentId||''}','${c.articleId}')">Reply</button></div></div>`;
+    }
+    function postComment(articleId){
+      const txt = document.getElementById('commentInput').value.trim(); if(!txt) return alert('Komentar kosong');
+      const item = articles.find(a=>a.id===articleId);
+      const meta = {id:uid(), articleId, userId: currentUser?currentUser.id:'guest', userName: currentUser?currentUser.name:'Guest', date:new Date().toISOString(), text:txt, replies:[]};
+      item.comments = item.comments || []; item.comments.unshift(meta); saveAll(); renderComments(articleId); document.getElementById('commentInput').value='';
+    }
+    function replyPrompt(commentId,parentId,articleId){
+      const reply = prompt('Balasan untuk komentar ini:'); if(!reply) return;
+      const item = articles.find(a=>a.id===articleId);
+      const c = (item.comments||[]).find(x=>x.id===commentId);
+      const r = {id:uid(), userId: currentUser?currentUser.id:'guest', userName: currentUser?currentUser.name:'Guest', date:new Date().toISOString(), text:reply};
+      c.replies = c.replies || []; c.replies.push(r); saveAll(); renderComments(articleId);
+    }
 
-    // --- Versions ---
-    function renderVersions(id){ const item = articles.find(a=>a.id===id); const list = document.getElementById('versionsList'); if(!item) return; list.innerHTML = (item.versions||[]).map((v,i)=>`<div class=\"small\">v${(item.versions.length-i)} • ${new Date(v.date).toLocaleString()} • ${v.editor||'unknown'}</div><div style=\"white-space:pre-wrap;margin-bottom:8px\">${escapeHtml(v.content).slice(0,300)}${v.content.length>300?'...':''}</div>`).join('') }
+    // Versions
+    function renderVersions(id){
+      const item = articles.find(a=>a.id===id); const list = document.getElementById('versionsList'); if(!item) return;
+      list.innerHTML = (item.versions||[]).map((v,i)=>`<div class="small">v${(item.versions.length-i)} • ${new Date(v.date).toLocaleString()} • ${escapeHtml(v.editor||'unknown')}</div><div style="white-space:pre-wrap;margin-bottom:8px">${escapeHtml(v.content).slice(0,300)}${v.content.length>300?'...':''}</div>`).join('');
+    }
 
-    // --- Rating & Bookmark ---
-    function vote(id, type){ articles = articles.map(a=>{ if(a.id!==id) return a; const r = a.rating||{up:0,down:0}; if(type==='up') r.up=(r.up||0)+1; else r.down=(r.down||0)+1; return {...a, rating:r} }); saveAll(); renderList(); }
-    function toggleBookmark(id){ if(!currentUser) return alert('Login untuk bookmark'); articles = articles.map(a=>{ if(a.id!==id) return a; const b = new Set(a.bookmarks||[]); if(b.has(currentUser.id)) b.delete(currentUser.id); else b.add(currentUser.id); return {...a, bookmarks:Array.from(b)} }); saveAll(); renderList(); }
+    // Rating & Bookmark
+    function vote(id,type){
+      articles = articles.map(a=>{ if(a.id!==id) return a; const r = a.rating||{up:0,down:0}; if(type==='up') r.up=(r.up||0)+1; else r.down=(r.down||0)+1; return {...a, rating:r}; });
+      saveAll(); renderList();
+    }
+    function toggleBookmark(id){
+      if(!currentUser) return alert('Login untuk bookmark');
+      articles = articles.map(a=>{ if(a.id!==id) return a; const b = new Set(a.bookmarks||[]); if(b.has(currentUser.id)) b.delete(currentUser.id); else b.add(currentUser.id); return {...a, bookmarks:Array.from(b)}; });
+      saveAll(); renderBookmarks(); renderList();
+    }
 
-    // --- Auto-tagging simple ---
-    function autotag(text){ const words = text.toLowerCase().match(/\b[a-zA-Z0-9]{4,}\b/g) || []; const freq = {}; words.forEach(w=>freq[w]=(freq[w]||0)+1); return Object.keys(freq).sort((a,b)=>freq[b]-freq[a]).slice(0,5) }
-    // when creating new article, if tags empty, generate
+    function renderBookmarks(){
+      const el = document.getElementById('bookmarkList'); el.innerHTML='';
+      if(!currentUser) { el.innerHTML='<div class="small">Login untuk melihat bookmark.</div>'; return; }
+      const list = articles.filter(a=> (a.bookmarks||[]).includes(currentUser.id));
+      if(!list.length) el.innerHTML='<div class="small">Belum ada bookmark.</div>';
+      list.forEach(a=>{ const card = document.createElement('div'); card.className='article'; card.innerHTML=`<div class="meta">${a.category} • ${new Date(a.date).toLocaleDateString()}</div><h4>${escapeHtml(a.title)}</h4><div style="margin-top:8px"><button onclick="openView('${a.id}')">Buka</button></div>`; el.appendChild(card); });
+    }
 
-    // --- Analytics / Dashboard ---
+    // Auto-tagging simple
+    function autotag(text){ const words = (text||'').toLowerCase().match(/\b[a-zA-Z0-9]{4,}\b/g) || []; const freq={}; words.forEach(w=>freq[w]=(freq[w]||0)+1); return Object.keys(freq).sort((a,b)=>freq[b]-freq[a]).slice(0,5); }
+
+    // Analytics/Dashboard
     function renderDashboard(){
       const analyticsCard = document.getElementById('analyticsCard');
       const recentCard = document.getElementById('recentCard');
       const statsCard = document.getElementById('statsCard');
-      // analytics: count per category
-      const count = {};
-      articles.forEach(a=> count[a.category]=(count[a.category]||0)+1)
-      analyticsCard.innerHTML = '<h4>Top Kategori</h4>'+Object.keys(count).map(k=>`<div>${k}: <b>${count[k]}</b></div>`).join('')
-      recentCard.innerHTML = '<h4>Artikel Terbaru</h4>'+articles.slice(0,5).map(a=>`<div class=\"small\">${new Date(a.date).toLocaleString()} • ${escapeHtml(a.title)}</div>`).join('')
-      const total = articles.length; const totalComments = articles.reduce((s,a)=>s+(a.comments?.length||0),0)
-      statsCard.innerHTML = `<h4>Statistik</h4><div>Total Artikel: <b>${total}</b></div><div>Total Komentar: <b>${totalComments}</b></div>`
-      // analytics panel
-      document.getElementById('analytics').innerHTML = '<div class="small">Analytic snapshot: kategori & aktivitas.</div>'
+      const count = {}; articles.forEach(a=> count[a.category]=(count[a.category]||0)+1);
+      analyticsCard.innerHTML = '<h4>Top Kategori</h4>'+Object.keys(count).map(k=>`<div>${k}: <b>${count[k]}</b></div>`).join('');
+      recentCard.innerHTML = '<h4>Artikel Terbaru</h4>'+articles.slice(0,6).map(a=>`<div class="small">${new Date(a.date).toLocaleString()} • ${escapeHtml(a.title)}</div>`).join('');
+      const total = articles.length; const totalComments = articles.reduce((s,a)=>s+(a.comments?.length||0),0);
+      statsCard.innerHTML = `<h4>Statistik</h4><div>Total Artikel: <b>${total}</b></div><div>Total Komentar: <b>${totalComments}</b></div>`;
+      document.getElementById('analyticsCard').classList.add('fade-in');
     }
 
-    // --- Import/Export ---
-    function exportJSON(){ const blob = new Blob([JSON.stringify(articles,null,2)],{type:'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='dicicip_kms_export.json'; a.click(); URL.revokeObjectURL(url) }
-    function importJSON(){ document.getElementById('fileInput').click() }
-    document.getElementById('fileInput').addEventListener('change', e=>{ const f = e.target.files[0]; if(!f) return; const reader = new FileReader(); reader.onload = ()=>{ try{ const data = JSON.parse(reader.result); if(Array.isArray(data)){ articles = data; saveAll(); renderList(); alert('Impor berhasil') }else alert('Format JSON tidak sesuai') }catch(err){ alert('Gagal membaca file: '+err.message) } }; reader.readAsText(f) })
+    // Import/Export/Backup
+    function exportJSON(){ const blob = new Blob([JSON.stringify(articles,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='dicicip_kms_export.json'; a.click(); URL.revokeObjectURL(a.href); }
+    function importJSON(){ document.getElementById('fileInput').click(); }
+    document.getElementById('fileInput').addEventListener('change', e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ try{ const d=JSON.parse(r.result); if(Array.isArray(d)){ articles=d; saveAll(); renderList(); alert('Impor berhasil'); } else alert('Format JSON tidak sesuai'); }catch(err){ alert('Gagal membaca file: '+err.message); } }; r.readAsText(f); });
 
-    // --- Backup / Clear ---
-    function downloadBackup(){ const blob = new Blob([JSON.stringify({articles,users},null,2)],{type:'application/json'}); const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='dicicip_kms_backup.json'; a.click(); }
-    function clearAll(){ if(!confirm('Hapus semua data?')) return; articles = []; users = []; localStorage.removeItem(LS_KEY); localStorage.removeItem(USERS_KEY); location.reload() }
+    function downloadBackup(){ const blob=new Blob([JSON.stringify({articles,users},null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='dicicip_kms_backup.json'; a.click(); URL.revokeObjectURL(a.href); }
 
-    // --- Misc UI ---
-    document.getElementById('fab').addEventListener('click', ()=> openEditor())
-    function showToast(msg){ alert(msg) }
+    function clearAll(){ if(!confirm('Hapus semua data?')) return; articles=[]; users=[]; localStorage.removeItem(LS_KEY); localStorage.removeItem(USERS_KEY); location.reload(); }
 
-    // --- Small enhancements ---
-    // auto-fill tags on new article if tag input empty
-    document.getElementById('title').addEventListener('blur', ()=>{
-      const tagsField = document.getElementById('tagsInput'); if(tagsField.value.trim()) return; const t = autotag(document.getElementById('title').value + ' ' + document.getElementById('content').value); tagsField.value = t.join(', ')
-    })
+    // Misc
+    document.getElementById('fab').addEventListener('click', ()=> openEditor());
+    document.getElementById('search').addEventListener('keydown', (e)=>{ if(e.key==='Enter') renderList(); });
+
+    // small auto-fill tags
+    document.getElementById('title').addEventListener('blur', ()=>{ const tagsField=document.getElementById('tagsInput'); if(tagsField.value.trim()) return; const t=autotag(document.getElementById('title').value+' '+document.getElementById('content').value); tagsField.value=t.join(', '); });
 
     // dark toggle
-    function toggleDark(){ document.documentElement.classList.toggle('force-dark'); const el = document.documentElement; if(el.classList.contains('force-dark')){ document.documentElement.style.setProperty('--bg','#0f0f12'); document.documentElement.style.setProperty('--card','#131417'); } else { document.documentElement.style.removeProperty('--bg'); document.documentElement.style.removeProperty('--card'); } }
+    function toggleDark(){ document.documentElement.classList.toggle('force-dark'); const el = document.documentElement; if(el.classList.contains('force-dark')){ document.documentElement.style.setProperty('--banana-2','#0f0f12'); document.documentElement.style.setProperty('--card','#121216'); } else { document.documentElement.style.removeProperty('--banana-2'); document.documentElement.style.removeProperty('--card'); } }
 
-    // voting debounce & renderList call
+    // initial renders
+    populateCategories(); renderList(); renderDashboard();
 
-    // initial render
-    renderList(); populateCategories(); renderDashboard()
+    // service worker (register if available)
+    if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
 
-    // register simple service worker for offline caching (if available)
-    if('serviceWorker' in navigator){ try{ navigator.serviceWorker.register('sw.js').catch(()=>{}) }catch(e){} }
   </script>
 </body>
 </html>
